@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/background_reg" >
+
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="31dp"
+            android:ems="10"
+            android:hint="取个什么名字" >
+
+            <requestFocus />
+        </EditText>
+
+        <EditText
+            android:id="@+id/pwd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/name"
+            android:layout_below="@+id/name"
+            android:layout_marginTop="14dp"
+            android:ems="10"
+            android:hint="找个安全的密码" 
+            android:inputType="textPassword" />
+
+        <Button
+            android:id="@+id/reg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/pwd"
+            android:layout_below="@+id/pwd"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="25dp"
+            android:text="注册" />
+
+        <Button
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/reg"
+            android:layout_alignBottom="@+id/reg"
+            android:layout_alignRight="@+id/pwd"
+            android:layout_marginRight="28dp"
+            android:text="取消" />
+
+    </RelativeLayout>

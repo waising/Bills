@@ -1,0 +1,11 @@
+<resources>
+
+    <string name="app_name">博思票据系统</string>
+    <string name="menu_settings">设置1</string>
+    <string name="title_activity_main">欢迎使用博思票据系统</string>
+    <string name="title_activity_reg">用户管理</string>
+    <string name="user">你的名称</string>
+    <string name="ss">试试手气</string>
+    <string name="send">发送</string>
+
+</resources>
