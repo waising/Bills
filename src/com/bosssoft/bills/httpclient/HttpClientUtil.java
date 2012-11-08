@@ -106,7 +106,15 @@ public class HttpClientUtil {
 		return retryHandler;
 	}
 
-	
+	/**
+	 * 
+	 * 函数名称：crtHttpClient 
+	 * 功能说明：创建httpclient对象
+	 * 参数说明：
+	 * @return
+	 * @date   创建时间：2012-11-8
+	 * @author 作者：wwx
+	 */
 	private static HttpClient crtHttpClient(){
 		HttpParams params = new BasicHttpParams();
 		// 增加最大连接到200
@@ -159,7 +167,6 @@ public class HttpClientUtil {
 	    	hpcliet =crtHttpClient();
 	    };
 	    return hpcliet;
-		//return hpcliet =crtHttpClient();
 	}
 	
 	
@@ -303,7 +310,7 @@ public class HttpClientUtil {
 			      formEntity = new UrlEncodedFormEntity(getParamsList(params), charset);
 			    }
 		    } catch (UnsupportedEncodingException e) {
-		    throw new IllegalArgumentException("不支持的编码集", e);
+		        throw new IllegalArgumentException("不支持的编码集", e);
 		    }
 		    
 		    HttpPost hp = new HttpPost(url);
@@ -311,7 +318,6 @@ public class HttpClientUtil {
 
 		 // 发送请求，得到响应
 			try {
-				
 				Log.v(TAG,"执行POST请求: " + hp.getURI());
 				HttpResponse response = getHttpClient().execute(hp);
 				Log.v(TAG,"执行POST结果: " + response.getStatusLine());
@@ -327,7 +333,6 @@ public class HttpClientUtil {
 				Log.v(TAG,"执行POST出错: " + e.getMessage());
 				return  "";
 			}
-
 	}
 	
 	/**
@@ -341,8 +346,8 @@ public class HttpClientUtil {
 	 * @param url 完整的Url地址
 	 * @return
 	 *
-	 * @date   创建时间：2011-4-19
-	 * @author 作者：Josen.Lin
+	 * @date   创建时间：
+	 * @author 作者：
 	 */
 	public static String excutePostUrl(String url) {
 	    if (url == null || url.trim().length()==0) {
