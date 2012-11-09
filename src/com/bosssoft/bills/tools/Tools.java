@@ -3,6 +3,7 @@ package com.bosssoft.bills.tools;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -95,4 +96,18 @@ public class Tools {
         return time;
     }
 
+    /**
+     * 
+     * 函数名称：nowDate 
+     * 功能说明：获取当前毫秒数 17位
+     * 参数说明：
+     * @return
+     * @date   创建时间：2012-11-9
+     * @author 作者：wwx
+     */
+    public static String nowDate(){
+		//时间格式想精确到多少位后面加s就行了
+	    java.text.SimpleDateFormat formatter=new java.text.SimpleDateFormat("yyMMddHHmmssssss");   
+	    return formatter.format(new Date());
+    }
 }

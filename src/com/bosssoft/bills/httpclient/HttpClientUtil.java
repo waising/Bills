@@ -1,6 +1,11 @@
 package com.bosssoft.bills.httpclient;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,6 +22,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
 import org.apache.http.NoHttpResponseException;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -41,6 +47,7 @@ import org.apache.http.protocol.ExecutionContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
+import android.os.Environment;
 import android.util.Log;
 
 /**
@@ -217,6 +224,7 @@ public class HttpClientUtil {
 		    if (url == null || url.trim().length()==0) {
 			  url = BASIC_URL;
 		    }
+		    
 		    if(charset == null || charset.trim().length()==0){
 		    	charset = CHARSET_GBK;
 		    }
@@ -236,6 +244,7 @@ public class HttpClientUtil {
 				HttpResponse response = getHttpClient().execute(hg);
 				Log.v(TAG,"执行GET结果: " + response.getStatusLine());
 				HttpEntity entity = response.getEntity();
+//				String result = getInputStreamReader(entity); 
 				String result = EntityUtils.toString(entity, charset);
 				hg.abort();
 				//httpClient.getConnectionManager().shutdown();
@@ -322,6 +331,7 @@ public class HttpClientUtil {
 				HttpResponse response = getHttpClient().execute(hp);
 				Log.v(TAG,"执行POST结果: " + response.getStatusLine());
 				HttpEntity entity = response.getEntity();
+//				String result = getInputStreamReader(entity); 
 				String result = EntityUtils.toString(entity, charset);
 				hp.abort();
 				//httpClient.getConnectionManager().shutdown();
@@ -364,6 +374,7 @@ public class HttpClientUtil {
 			HttpResponse response = getHttpClient().execute(hp, context);
 			Log.v(TAG,"执行POST结果: " + response.getStatusLine());
 			HttpEntity entity = response.getEntity();
+//			String result = getInputStreamReader(entity); 
 			String result = EntityUtils.toString(entity, CHARSET_GBK);
 //			EntityUtils.consume(entity);
 			hp.abort();
@@ -398,4 +409,76 @@ public class HttpClientUtil {
 	    }
 
 
+	  /**
+	   * 
+	   * 函数名称：getInputStreamReader 
+	   * 功能说明：获取返回信息
+	   * 参数说明：
+	   * @param entity
+	   * @return
+	   * @throws UnsupportedEncodingException
+	   * @throws IllegalStateException
+	   * @throws IOException
+	   * @date   创建时间：2012-11-9
+	   * @author 作者：wwx
+	   */
+	  private static String getInputStreamReader(HttpEntity entity) throws UnsupportedEncodingException, IllegalStateException, IOException{
+			StringBuilder result = new StringBuilder();
+			if(entity != null){
+				BufferedReader reader = new BufferedReader(
+						new InputStreamReader(entity.getContent(),"UTF-8"),8192);
+				String line = null;
+				while((line = reader.readLine()) != null){
+					result.append(line+"\n");//按行读取放入StringBuilder中
+				}
+			    reader.close();
+			}
+			return result.toString();
+	  }
+	  
+	  /**
+	   * 
+	   * 函数名称：downAppFile 
+	   * 功能说明：下载文件
+	   * 参数说明：
+	   * @param url
+	   * @param appName
+	   * @date   创建时间：2012-11-9
+	   * @author 作者：wwx
+	   */
+	  public static void downAppFile(String url,String appName){
+		  
+		HttpGet hg = new HttpGet(url);
+		
+		// 发送请求，得到响应
+		try 
+		{
+			HttpResponse response = getHttpClient().execute(hg);
+			HttpEntity entity = response.getEntity();
+			long length = entity.getContentLength();
+			Log.isLoggable("DownTag", (int) length);
+			InputStream is = entity.getContent();
+			FileOutputStream fileOutputStream = null;
+			if(is == null){
+				throw new RuntimeException("isStream is null");
+			}
+			File file = new File(Environment.getExternalStorageDirectory(),appName);
+			fileOutputStream = new FileOutputStream(file);
+			byte[] buf = new byte[1024];
+			int ch = -1;
+			do{
+				ch = is.read(buf);
+				if(ch <= 0)break;
+				fileOutputStream.write(buf, 0, ch);
+			}while(true);
+			is.close();
+			fileOutputStream.close();
+		}catch(ClientProtocolException e){
+				e.printStackTrace();
+		}catch(IOException e){
+			hg.abort();
+			Log.v(TAG,"执行下载出错: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
 }

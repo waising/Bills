@@ -1,9 +1,11 @@
 package com.bosssoft.bills.tools;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
@@ -29,6 +31,8 @@ import android.view.inputmethod.InputMethodManager;
  */
 public class AndroidTools {
     
+	final static String TAG = "ANDROIDTOOLS";
+	
 	/**
 	 * 
 	 * 函数名称：isConnect 
@@ -39,12 +43,15 @@ public class AndroidTools {
 	 * @author 作者：wwx
 	 */
 	public static boolean isConnect(Activity mActivity){  
-	    ConnectivityManager cm = (ConnectivityManager)   
-	        mActivity.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);  
-	    if(cm!=null){  
-	        return true;  
-	    }  
-	    return false;  
+    	try{
+    		ConnectivityManager cm = (ConnectivityManager)mActivity.getApplicationContext()
+    				.getSystemService(Context.CONNECTIVITY_SERVICE);
+    		NetworkInfo netWorkInfo = cm.getActiveNetworkInfo();
+    		return (netWorkInfo != null && netWorkInfo.isAvailable());
+    	}catch(Exception e){
+    		e.printStackTrace();
+    		return false;
+    	}
 	}  
 	
 	/**
@@ -111,8 +118,50 @@ public class AndroidTools {
                 isflag = true;
             }
         } catch (Exception e) {
-            Log.i("CHECKAPP","获取系统是否为系统应用异常!");
+            Log.i(TAG,"获取系统是否为系统应用异常!");
         }
         return isflag;
     }
+   
+    /**
+     * 
+     * 函数名称：getVesionName 
+     * 功能说明：获取系统版本
+     * 参数说明：
+     * @param context
+     * @return
+     * @date   创建时间：2012-11-9
+     * @author 作者：wwx
+     */
+    public String getVesionName(Context context) {
+    	String versionName = "";
+    	try {
+    		versionName = context.getPackageManager().getPackageInfo("net.vpntunnel", 0).versionName;
+    	} catch (NameNotFoundException e) {
+    		Log.i(TAG, "getVesionName:"+e.getMessage());
+    	}
+     
+    	return versionName;
+    }
+    
+    /**
+     * 
+     * 函数名称：getVersionCode 
+     * 功能说明：
+     * 参数说明：
+     * @param context
+     * @return
+     * @date   创建时间：2012-11-9
+     * @author 作者：wwx
+     */
+    public int getVersionCode(Context context) {
+    	int versionCode = 0;
+    	try {
+    		versionCode = context.getPackageManager().getPackageInfo("net.vpntunnel", 0).versionCode;
+    	} catch (NameNotFoundException e) {
+    		Log.i(TAG, "getVersionCode"+e.getMessage());
+    	}
+		return versionCode;
+    }
+    
 }
